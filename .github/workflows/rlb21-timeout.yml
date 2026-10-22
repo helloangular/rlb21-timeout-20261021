@@ -1,0 +1,35 @@
+name: rlb21-timeout
+run-name: "${{ inputs.helio_execution_id }}"
+'on':
+  workflow_dispatch:
+    inputs:
+      helio_execution_id:
+        type: string
+        required: false
+        default: ""
+      helio_release_id:
+        type: string
+        required: false
+        default: ""
+      workflow_revision:
+        type: string
+        required: false
+        default: ""
+      release_version:
+        type: string
+        required: false
+        default: ""
+permissions:
+  contents: read
+concurrency:
+  group: rlb21-timeout
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    environment: rlb21-timeout-test
+    steps:
+      - name: "Run past the 1-minute job limit on purpose (GitHub ends it as a timeout)"
+        shell: bash
+        run: "sleep 150"
